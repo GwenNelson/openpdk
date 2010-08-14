@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Dogsbody and Ratchet Software
+ * Copyright (c) 2010 John of dogsbodynet.com
  *                    Gareth Nelson
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
