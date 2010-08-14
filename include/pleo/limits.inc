@@ -1,0 +1,23 @@
+
+
+
+#define SENSORS_RAM_MAX 3*1024
+
+#define MAIN_RAM_MAX 4*1024
+
+#if PLEO_API == PLEO_1_1
+#define AUX_RAM_MAX 5*1024/2
+#elseif PLEO_API == PLEO_1_0
+#define AUX_RAM_MAX 2*1024
+#endif
+
+#define USER_RAM_MAX 2*1024
+
+
+
+
+#define SENSORS_MAX SENSORS_RAM_MAX
+#define MAIN_MAX MAIN_RAM_MAX
+#define AUX_MAX AUX_RAM_MAX
+#define USER_MAX USER_RAM_MAX
+

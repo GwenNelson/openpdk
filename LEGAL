@@ -1,0 +1,9 @@
+DISCLAIMER: I'm a programmer, not a lawyer - none of this is legal advice. I accept no responsibility at all for any of the below and offer it only as my personal understanding. I may be completely and utterly wrong. You should contact your own legal counsel if in doubt. Pretty much the only thing I can promise is that anything authored 100% by me I license to you under the GPL - but I make no guarantees about the legal safety of any of this code, including the code I have authored.
+
+Everything in this archive is licensed under the GPL version 2 with a few exceptions:
+BeautifulSoup.py - a BSD-like license, read the file to get the license
+Pawn - Apache License 2.0
+
+Both of these licenses are GPL compatible, but as included here are only slightly tweaked and so probably don't come under the GPL.
+
+The include files provided here are extracted from the official PDK and include function prototypes and constants only, no copyrightable code has been copied over to my knowledge. Based on precedent such as the Sega v Accolade case and the ongoing WINE project, my personal opinion is that function prototypes and constants lack copyright protection as purely functional or factual elements rather than creative works. If in doubt, you have the option of not using my copies of these files (instead just remove the include/ directory and drop in a symlink to the official PDK), or contacting a lawyer.
