@@ -1,0 +1,1 @@
+/usr/lib/ccache/gcc    -fPIC CMakeFiles/pawncc.dir/pawncc.o  -o pawncc -rdynamic -lpthread -lm libpawnc.so -lpthread -lm -Wl,-rpath,/home/gareth/open_pdk/pawn/source/compiler 
