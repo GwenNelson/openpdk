@@ -34,6 +34,17 @@ void usage() {
      printf("\t c create archive with contents of path specified\n");
 }
 
+#define DUMP_RES(__RES_TYPE__,__RES_EXTENSION__,__READABLE_NAME__) \
+        if(urf.m_##__RES_TYPE__.m_count==0) { \
+           printf("no %ss\n", __READABLE_NAME__); \
+        } else { \
+           for(int i=0; i<urf.m_##__RES_TYPE__.m_count; i++) { \
+               res = urf.m_##__RES_TYPE__.m_resource_list[i]; \
+               printf("%-30s\t\t%-30d\t\t",res.m_element_name,res.m_element_size); \
+               printf("%s/%s\n",__RES_EXTENSION__,__READABLE_NAME__); \
+           } \
+        }
+
 int main(int argc, char* argv[])
 {
   if(argc<3) {
@@ -53,28 +64,13 @@ int main(int argc, char* argv[])
   resource_type res;
   if(strncmp(command,"l",1)==0) {
 
-     // TODO: Clean this up with macro
      printf("%-30s\t\t%-30s\t\t%-30s\n","Name","Size","Type");
 
-     if(urf.m_sounds.m_count==0) {
-        printf("no sounds\n");
-     } else {
-        for(int i=0; i<urf.m_sounds.m_count; i++) {
-          res = urf.m_sounds.m_resource_list[i];
-          printf("%-30s\t\t%-30d\t\t%-30s\n",res.m_element_name,res.m_element_size,"USF/Sound");
-        }
-     }
-     
-     if(urf.m_motions.m_count==0) {
-        printf("no motions\n");
-     } else {
-        for(int i=0; i<urf.m_motions.m_count; i++) {
-          res = urf.m_motions.m_resource_list[i];
-          printf("%-30s\t\t%-30d\t\t%-30s\n",res.m_element_name,res.m_element_size,"Motion");
-        }
-     }     
-
-
+     DUMP_RES(sounds,PLEO_TOC_SOUND_SIGNATURE,"Sound")
+     DUMP_RES(motions,PLEO_TOC_MTN_SIGNATURE,"Motion")
+     DUMP_RES(commands,PLEO_TOC_COMMAND_SIGNATURE,"Command")
+     DUMP_RES(scripts,"AMX","Script")
+     DUMP_RES(properties,PLEO_TOC_PROPERTY_SIGNATURE,"Properties file")
      
   }
 }
