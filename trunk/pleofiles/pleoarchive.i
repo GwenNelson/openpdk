@@ -21,6 +21,13 @@
  * THE SOFTWARE.
  */
 %module pleoarchive
+%include "typemaps.i"
+
+
+%{
+#include "pleoarchive.h"
+#include "resource_list.h"
+%}
 
 class pleo_archive_type
 {
@@ -34,12 +41,19 @@ public:
   pleo_archive_type();
 
   void init_archive();
+  %feature("autodoc","1");
   int get_resource_type (unsigned char *binfile);
-  int read_archive_file (const char *targetfile, int flags=0);
+  %feature("autodoc","1");
+  int read_archive_file (char *targetfile, int flags=0);
+  %feature("autodoc","1");
   int read_archive_image (const char *targetfile, unsigned char *binfile, int binfilelen, int flags=0);
+  %feature("autodoc","1");
   int compute_archive_filesize (int flags=0);
+  %feature("autodoc","1");
   unsigned char *write_archive_image (const char *targetfile, int *binfilelen, int flags=0);
+  %feature("autodoc","1");
   int write_archive_file (const char *targetfile, int flags=0);
+  %feature("autodoc","1");
   unsigned int adler32(unsigned int adler, unsigned char *buf, unsigned int len);
 };
 
