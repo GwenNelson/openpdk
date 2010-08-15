@@ -23,6 +23,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <malloc.h>
+#include <unistd.h>
 #include "pleoarchive.h"
 #include "resource_list.h"
 
@@ -57,20 +59,32 @@ int main(int argc, char* argv[])
 
   pleo_archive_type urf;
   if(urf.read_archive_file(archive_file)<0) {
-     printf("Error reading!\n");
+     fprintf(stderr,"Error reading!\n");
      return 1;
   }
 
   resource_type res;
   if(strncmp(command,"l",1)==0) {
-
      printf("%-30s\t\t%-30s\t\t%-30s\n","Name","Size","Type");
-
      DUMP_RES(sounds,PLEO_TOC_SOUND_SIGNATURE,"Sound")
      DUMP_RES(motions,PLEO_TOC_MTN_SIGNATURE,"Motion")
      DUMP_RES(commands,PLEO_TOC_COMMAND_SIGNATURE,"Command")
      DUMP_RES(scripts,"AMX","Script")
      DUMP_RES(properties,PLEO_TOC_PROPERTY_SIGNATURE,"Properties file")
+     return 0;
+  }
+  if(strncmp(command,"x",1)==0) {
+     char *dest_path;
+     if(argc==4) {
+        dest_path = argv[3];
+     } else {
+        dest_path = (char*)malloc(sizeof(char*)*1024);
+        if(getcwd(dest_path,1024)==NULL) {
+           fprintf(stderr,"Path too long!\n");
+           return 1;
+        }
+        
+     }
      
   }
 }
