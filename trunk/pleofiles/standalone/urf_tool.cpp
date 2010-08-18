@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include "pleoarchive.h"
 #include "resource_list.h"
 
@@ -45,6 +47,14 @@ void usage() {
                printf("%-30s\t\t%-30d\t\t",res.m_element_name,res.m_element_size); \
                printf("%s/%s\n",__RES_EXTENSION__,__READABLE_NAME__); \
            } \
+        }
+
+#define EXTRACT_RES(__RES_TYPE__,__RES_EXTENSION__,__READABLE_NAME__) \
+        mkdir(#__RES_TYPE__,(mode_t)0777); \
+        if(urf.m_##__RES_TYPE__.m_count==0) { \
+           printf("no %s\n", __READABLE_NAME__); \
+        } else { \
+          urf.m_##__RES_TYPE__.write_all_element_files((char*)#__RES_TYPE__,(char*)__RES_EXTENSION__); \
         }
 
 int main(int argc, char* argv[])
@@ -70,7 +80,7 @@ int main(int argc, char* argv[])
      DUMP_RES(motions,PLEO_TOC_MTN_SIGNATURE,"Motion")
      DUMP_RES(commands,PLEO_TOC_COMMAND_SIGNATURE,"Command")
      DUMP_RES(scripts,"AMX","Script")
-     DUMP_RES(properties,PLEO_TOC_PROPERTY_SIGNATURE,"Properties file")
+     DUMP_RES(properties,PLEO_TOC_PROPERTY_SIGNATURE,"Propertie")
      return 0;
   }
   if(strncmp(command,"x",1)==0) {
@@ -83,9 +93,16 @@ int main(int argc, char* argv[])
            fprintf(stderr,"Path too long!\n");
            return 1;
         }
-        
      }
-     
+     if(chdir(dest_path)==-1) {
+        fprintf(stderr,"Could not change CWD - does the destination path exist?\n");
+        return 1;
+     }
+     EXTRACT_RES(sounds,PLEO_TOC_SOUND_SIGNATURE,"Sound")
+     EXTRACT_RES(motions,PLEO_TOC_MTN_SIGNATURE,"Motion")
+     EXTRACT_RES(commands,PLEO_TOC_COMMAND_SIGNATURE,"Command")
+     EXTRACT_RES(scripts,"AMX","Script")
+     EXTRACT_RES(properties,PLEO_TOC_PROPERTY_SIGNATURE,"Propertie")
   }
 }
 
