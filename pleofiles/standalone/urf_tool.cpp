@@ -27,6 +27,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <dirent.h>
+#include <string.h>
 #include "pleoarchive.h"
 #include "resource_list.h"
 
@@ -36,6 +38,14 @@ void usage() {
      printf("\t l list contents\n");
      printf("\t x extract all files to path specified (current directory if none)\n");
      printf("\t c create archive with contents of path specified\n");
+}
+
+bool endswith(char* s1, char* s2) {
+     int s1_len = strlen(s1);
+     int s2_len = strlen(s2);
+     s1 += (s1_len-s2_len);
+     if (strncmp(s1,s2,s2_len)==0) return true;
+     return false;
 }
 
 #define DUMP_RES(__RES_TYPE__,__RES_EXTENSION__,__READABLE_NAME__) \
@@ -57,6 +67,21 @@ void usage() {
           urf.m_##__RES_TYPE__.write_all_element_files((char*)#__RES_TYPE__,(char*)__RES_EXTENSION__); \
         }
 
+#define IMPORT_RES(__RES_TYPE__,__RES_EXTENSION__) \
+        chdir(#__RES_TYPE__); \
+        DIR* dir = opendir("."); \
+        struct dirent* cur_ent; \
+        while (cur_ent != NULL) { \
+           cur_ent = readdir(dir);\
+           if(cur_ent != NULL) {\
+             if(endswith(cur_ent->d_name,__RES_EXTENSION__)) { \
+                printf("%s\n",cur_ent->d_name); \ 
+             } \
+           }\ 
+        }\
+        closedir(dir); 
+
+
 #define LOAD_URF \
         if(urf.read_archive_file(archive_file)<0) { \
            fprintf(stderr,"Error reading!\n"); \
@@ -65,6 +90,7 @@ void usage() {
 
 int main(int argc, char* argv[])
 {
+  endswith((char*)"blameow",(char*)"meow");
   if(argc<3) {
      usage();
      return 1;
@@ -116,10 +142,11 @@ int main(int argc, char* argv[])
      }
      dest_path = argv[3];
      if(chdir(dest_path)==-1) {
-        fprintf("stderr","Could not change CWD - does the destination path exist?\n");
+        fprintf(stderr,"Could not change CWD - does the destination path exist?\n");
         return 1;
      }
-     
+     urf.init_archive();
+     IMPORT_RES(sounds,PLEO_TOC_SOUND_SIGNATURE)
   }
 }
 
