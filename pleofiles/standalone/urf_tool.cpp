@@ -65,7 +65,6 @@ int main(int argc, char* argv[])
   }
   char* command      = argv[1];
   char* archive_file = argv[2];
-  printf("Listing archive file %s...\n",archive_file);
 
   pleo_archive_type urf;
   if(urf.read_archive_file(archive_file)<0) {
@@ -98,6 +97,7 @@ int main(int argc, char* argv[])
         fprintf(stderr,"Could not change CWD - does the destination path exist?\n");
         return 1;
      }
+     printf("Extracting %s into %s...\n",archive_file,dest_path);
      EXTRACT_RES(sounds,PLEO_TOC_SOUND_SIGNATURE,"Sound")
      EXTRACT_RES(motions,PLEO_TOC_MTN_SIGNATURE,"Motion")
      EXTRACT_RES(commands,PLEO_TOC_COMMAND_SIGNATURE,"Command")
