@@ -57,6 +57,12 @@ void usage() {
           urf.m_##__RES_TYPE__.write_all_element_files((char*)#__RES_TYPE__,(char*)__RES_EXTENSION__); \
         }
 
+#define LOAD_URF \
+        if(urf.read_archive_file(archive_file)<0) { \
+           fprintf(stderr,"Error reading!\n"); \
+           return 1; \
+        }
+
 int main(int argc, char* argv[])
 {
   if(argc<3) {
@@ -67,13 +73,10 @@ int main(int argc, char* argv[])
   char* archive_file = argv[2];
 
   pleo_archive_type urf;
-  if(urf.read_archive_file(archive_file)<0) {
-     fprintf(stderr,"Error reading!\n");
-     return 1;
-  }
-
   resource_type res;
+
   if(strncmp(command,"l",1)==0) {
+     LOAD_URF
      printf("%-30s\t\t%-30s\t\t%-30s\n","Name","Size","Type");
      DUMP_RES(sounds,PLEO_TOC_SOUND_SIGNATURE,"Sound")
      DUMP_RES(motions,PLEO_TOC_MTN_SIGNATURE,"Motion")
@@ -83,6 +86,7 @@ int main(int argc, char* argv[])
      return 0;
   }
   if(strncmp(command,"x",1)==0) {
+     LOAD_URF
      char *dest_path;
      if(argc==4) {
         dest_path = argv[3];
@@ -103,6 +107,19 @@ int main(int argc, char* argv[])
      EXTRACT_RES(commands,PLEO_TOC_COMMAND_SIGNATURE,"Command")
      EXTRACT_RES(scripts,"AMX","Script")
      EXTRACT_RES(properties,PLEO_TOC_PROPERTY_SIGNATURE,"Propertie")
+  }
+  if(strncmp(command,"c",1)==0) {
+     char *dest_path;
+     if(argc<4) {
+        usage();
+        return 1;
+     }
+     dest_path = argv[3];
+     if(chdir(dest_path)==-1) {
+        fprintf("stderr","Could not change CWD - does the destination path exist?\n");
+        return 1;
+     }
+     
   }
 }
 
