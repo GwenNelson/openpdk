@@ -281,7 +281,7 @@ bool pleo_resource_type::write_element_file(int index, char *pathname, char *fil
 
   char target_file[1024];
   if (m_resource_list[index].m_element_name[0]) 
-    sprintf (target_file,"%s\\%s.%s",pathname,m_resource_list[index].m_element_name,fileext);
+    sprintf (target_file,"%s/%s.%s",pathname,m_resource_list[index].m_element_name,fileext);
   else sprintf (target_file,"%s\\zzz%d.%s",pathname,index,fileext);
 
   FILE *fileid = fopen(target_file,"wb");
