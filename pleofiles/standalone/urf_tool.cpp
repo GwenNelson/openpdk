@@ -48,6 +48,44 @@ bool endswith(char* s1, char* s2) {
      return false;
 }
 
+#define CHUNK 1024
+
+/* Read the contents of a file into a buffer.  Return the size of the file 
+ * and set buf to point to a buffer allocated with malloc that contains  
+ * the file contents.
+ */
+int read_file(char* filename, char **buf) 
+{
+  FILE* fp = fopen(filename,"rb");
+  int n, np,r;
+  char *b, *b2;
+
+  n = CHUNK;
+  np = n;
+  b = (char*)malloc(sizeof(char)*n);
+  
+  while ((r = fread(b, sizeof(char), CHUNK, fp)) > 0) {
+    n += r;
+    if (np - n < CHUNK) { 
+      np *= 2;                      // buffer is too small, the next read could overflow!
+      b2 = (char*)malloc(np*sizeof(char));
+      memcpy(b2, b, n * sizeof(char));
+      free(b);
+      b = b2;
+    }
+  }
+  *buf = b;
+  fclose(fp);
+  return n;
+}
+
+// strip off file extensions
+char* splitstr(char* s1, char* s2) {
+    char* retval=strtok(s1,s2);
+    retval[strlen(retval)-1]=(char)0;
+    return retval;
+}
+
 #define DUMP_RES(__RES_TYPE__,__RES_EXTENSION__,__READABLE_NAME__) \
         if(urf.m_##__RES_TYPE__.m_count==0) { \
            printf("no %ss\n", __READABLE_NAME__); \
@@ -69,13 +107,15 @@ bool endswith(char* s1, char* s2) {
 
 #define IMPORT_RES(__RES_TYPE__,__RES_EXTENSION__) \
         chdir(#__RES_TYPE__); \
-        DIR* dir = opendir("."); \
-        struct dirent* cur_ent; \
         while (cur_ent != NULL) { \
            cur_ent = readdir(dir);\
            if(cur_ent != NULL) {\
              if(endswith(cur_ent->d_name,__RES_EXTENSION__)) { \
-                printf("%s\n",cur_ent->d_name); \ 
+                printf("%s\n",splitstr(cur_ent->d_name,__RES_EXTENSION__)); \ 
+                cur_res = (resource_type*)malloc(sizeof(resource_type)); \
+                strncpy(__RES_EXTENSION__,cur_res->m_signature,4);\
+                cur_res->m_element_name = cur_ent->d_name; \
+                cur_res->m_element_size = read_file(cur_ent->d_name,cur_res->m_element); \
              } \
            }\ 
         }\
@@ -146,7 +186,12 @@ int main(int argc, char* argv[])
         return 1;
      }
      urf.init_archive();
+     DIR* dir;
+     struct dirent* cur_ent;
+     resource_type* cur_res;
+     
      IMPORT_RES(sounds,PLEO_TOC_SOUND_SIGNATURE)
+     IMPORT_RES(motions,PLEO_TOC_MTN_SIGNATURE)
   }
 }
 
