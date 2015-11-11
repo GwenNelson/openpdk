@@ -1,4 +1,4 @@
-DISCLAIMER: I'm a programmer, not a lawyer - none of this is legal advice. I accept no responsibility at all for any of the below and offer it only as my personal understanding. I may be completely and utterly wrong. You should contact your own legal counsel if in doubt. Pretty much the only thing I can promise is that anything authored 100% by me I license to you under the GPL - but I make no guarantees about the legal safety of any of this code, including the code I have authored.
+DISCLAIMER: I'm a programmer, not a lawyer - none of this is legal advice. I accept no responsibility at all for any of the below and offer it only as my personal understanding. I may be completely and utterly wrong. You should contact your own legal counsel if in doubt. Pretty much the only thing I can promise is that anything authored 100% by me I license to you under the GPL (v2 or later) - but I make no guarantees about the legal safety of any of this code, including the code I have authored.
 
 Everything in this archive is licensed under the GPL version 2 with a few exceptions:
 BeautifulSoup.py - a BSD-like license, read the file to get the license
